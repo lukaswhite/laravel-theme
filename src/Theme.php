@@ -1163,7 +1163,8 @@ class Theme implements ThemeContract
     {
         if ($this->view->exists($this->content)) {
             return ($realpath) ? $this->view->getFinder()->find($this->content) : $this->content;
-        }
+        } 
+        return null;
     }
 
     /**
