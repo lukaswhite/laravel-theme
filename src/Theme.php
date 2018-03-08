@@ -1037,9 +1037,28 @@ class Theme implements ThemeContract
     public function scope($view, $args = array(), $type = null)
     {
         // Add namespace to find in a theme path.
-        $path = $this->getThemeNamespace('views.'.$view);
+        //$path = ( new StringUtilities( ) )->replaceNth( '::', '.', $this->getThemeNamespace('views.'.$view), 1 );
+        $path = $this->str_replace_nth( '::', '.', $this->getThemeNamespace('views.'.$view), 1 );
 
         return $this->of($path, $args, $type);
+    }
+
+    /**
+     * Replace the nth occurence of a search string in a string
+     *
+     * @param string $search
+     * @param string $replace
+     * @param string $subject
+     * @param int $nth
+     * @return string mixed
+     */
+    private function str_replace_nth($search, $replace, $subject, $nth)
+    {
+        $found = preg_match_all('/'.preg_quote($search).'/', $subject, $matches, PREG_OFFSET_CAPTURE);
+        if (false !== $found && $found > $nth) {
+            return substr_replace($subject, $replace, $matches[0][$nth][1], strlen($search));
+        }
+        return $subject;
     }
 
     /**
